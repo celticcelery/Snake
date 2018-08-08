@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,9 +13,7 @@ import java.util.Random;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-	Texture img, imgOfSnakeBody, imgOfPizza;
-	float msElapsed;
-	final static int MS_CONSTANT = 150;
+	final static int MS_CONSTANT = 100;
 	Timer timer;
 
 
@@ -24,13 +23,16 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		Storage.batch = new SpriteBatch();
-		img = new Texture("field_cell.bmp");
-		imgOfSnakeBody = new Texture("snake_body.bmp");
-		imgOfPizza = new Texture("pizza.bmp");
+		Storage.assetManager = new AssetManager();
+		Storage.assetManager.load("field_cell.bmp", Texture.class);
+		Storage.assetManager.load("snake_head.bmp", Texture.class);
+		Storage.assetManager.load("snake_body.bmp", Texture.class);
+		Storage.assetManager.load("pizza.bmp", Texture.class);
+		Storage.assetManager.finishLoading();
 		Storage.random = new Random();
 		Storage.font   = new BitmapFont();
 		Storage.font.getData().setScale(5);
-		Storage.field  = new Field(img);
+		Storage.field  = new Field();
 		Storage.snake  = new Snake();
 		Storage.pizza  = new Pizza();
 		timer = new Timer(MS_CONSTANT);
@@ -50,8 +52,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 
 
+
+
 		if(timer.isOnTime()){
 			Storage.snake.move();
+			if(Storage.snake.getHasCrashed()){
+				System.out.println("Game Over");
+			}
 		}
 
 		if(Storage.snake.contains(Storage.pizza.colIndex, Storage.pizza.rowIndex)){
@@ -66,8 +73,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		Storage.batch.begin();
 		Storage.field.draw();
-		Storage.snake.draw(imgOfSnakeBody);
-		Storage.pizza.draw(imgOfPizza);
+		Storage.snake.draw();
+		Storage.pizza.draw();
 		Storage.font.draw(Storage.batch, "pizza count: " + Storage.snake.getEatenPizzasCount() + " cells moved: " + Storage.snake.getSnakeCellsMoved(), 0, Gdx.graphics.getHeight());
 		Storage.batch.end();
 	}
@@ -75,10 +82,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		Storage.batch.dispose();
-		img.dispose();
-		imgOfSnakeBody.dispose();
-		imgOfPizza.dispose();
 		Storage.font.dispose();
+		Storage.assetManager.dispose();
 	}
 
 }

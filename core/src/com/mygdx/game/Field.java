@@ -9,9 +9,10 @@ public class Field {
 	final static int MAX_ROW_COUNT = 23;
 	final static int MAX_COL_COUNT = 15;
 	static int xOffset;
-	Texture img;
+	Texture img = Storage.assetManager.get("field_cell.bmp", Texture.class);
 
-	Field(Texture img){
+
+	Field(){
 		this.img = img;
 		xOffset = (Gdx.graphics.getWidth() - MAX_COL_COUNT * img.getWidth())/2;
 	}

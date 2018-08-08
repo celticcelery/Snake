@@ -14,14 +14,19 @@ public class Snake {
 	private SnakeCell headCell;
 	private int eatenPizzasCount;
 	private int snakeCellsMoved, oldTailColIndex, oldTailRowIndex;
+	private boolean hasCrashed;
 
 	public Snake(){
-		headCell = new SnakeCell(Field.MAX_COL_COUNT / 2, Field.MAX_ROW_COUNT / 2);
+		headCell = new SnakeCell(Field.MAX_COL_COUNT / 2, Field.MAX_ROW_COUNT / 2, true);
 		cells.add(headCell);
-		cells.add(new SnakeCell(cells.get(0).colIndex - 1, Field.MAX_ROW_COUNT / 2));
-		cells.add(new SnakeCell(cells.get(0).colIndex - 2, Field.MAX_ROW_COUNT / 2));
+		cells.add(new SnakeCell(cells.get(0).colIndex - 1, Field.MAX_ROW_COUNT / 2, false));
+		cells.add(new SnakeCell(cells.get(0).colIndex - 2, Field.MAX_ROW_COUNT / 2, false));
 
 //		cells.add(new SnakeCell());
+	}
+
+	public boolean getHasCrashed() {
+		return hasCrashed;
 	}
 
 	public Direction getDirection() {
@@ -46,9 +51,11 @@ public class Snake {
 		this.direction = direction;
 	}
 
-	public void draw(Texture texture){
+
+
+	public void draw(){
 		for(SnakeCell curCell : cells) {
-			curCell.draw(texture);
+			curCell.draw();
 		}
 
 	}
@@ -66,11 +73,14 @@ public class Snake {
 		if(!hasValidHeadPos()){
 			headCell.rowIndex = oldHeadRowIndex;
 			headCell.colIndex = oldHeadColIndex;
+			hasCrashed = true;
 			return;
 		}
 		repositionTail(oldHeadColIndex, oldHeadRowIndex);
 
 		snakeCellsMoved++;
+
+
 
 	}
 
@@ -102,7 +112,7 @@ public class Snake {
 
 	public void eatPizza(){
 		eatenPizzasCount++;
-		cells.add(new SnakeCell(oldTailColIndex, oldTailRowIndex));
+		cells.add(new SnakeCell(oldTailColIndex, oldTailRowIndex, false));
 
 
 	}

@@ -7,12 +7,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import java.util.Random;
 
 public class Pizza {
-	Texture img;
+	Texture img = Storage.assetManager.get("pizza.bmp", Texture.class);
 	int colIndex, rowIndex;
 	Pizza() {
 		respawn();
 	}
-	public void draw(Texture img){
+	public void draw(){
 		Storage.batch.draw(img, colIndex * img.getWidth() + Field.xOffset, rowIndex * img.getHeight());
 	}
 

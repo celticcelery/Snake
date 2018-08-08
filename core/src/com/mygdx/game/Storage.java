@@ -1,6 +1,7 @@
 package com.mygdx.game;
 
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -14,5 +15,6 @@ public class Storage {
 	static Field field;
 	static Random random;
 	static BitmapFont font;
+	static AssetManager assetManager;
 }
 
