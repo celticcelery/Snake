@@ -2,15 +2,14 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.ArrayList;
 
 public class Snake {
 	ArrayList<SnakeCell> cells = new ArrayList<SnakeCell>();
 	enum Direction {UP, DOWN, LEFT, RIGHT};
-	private Direction direction = Direction.RIGHT;
+	private Direction curDirection = Direction.RIGHT;
+	private Direction pendingNewDirection = Direction.RIGHT;
 	private SnakeCell headCell;
 	private int eatenPizzasCount;
 	private int snakeCellsMoved, oldTailColIndex, oldTailRowIndex;
@@ -29,26 +28,18 @@ public class Snake {
 		return hasCrashed;
 	}
 
-	public Direction getDirection() {
-		return direction;
+	public Direction getCurDirection() {
+		return curDirection;
 	}
 
-	public void setDirection(Direction direction) {
+	public void setCurDirection(Direction newDirection) {
 
-		if(this.direction == Direction.RIGHT && Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			direction = Direction.RIGHT;
-		}
-		if(this.direction == Direction.LEFT && Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			direction = Direction.LEFT;
-		}
-		if(this.direction == Direction.UP && Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			direction = Direction.UP;
-		}
-		if(this.direction == Direction.DOWN && Gdx.input.isKeyPressed(Input.Keys.UP)){
-			direction = Direction.DOWN;
-		}
+		if(curDirection == Direction.DOWN && newDirection == Direction.UP) return;
+		if(curDirection == Direction.UP && newDirection == Direction.DOWN) return;
+		if(curDirection == Direction.LEFT && newDirection == Direction.RIGHT) return;
+		if(curDirection == Direction.RIGHT && newDirection == Direction.LEFT) return;
 
-		this.direction = direction;
+		pendingNewDirection = newDirection;
 	}
 
 
@@ -61,10 +52,11 @@ public class Snake {
 	}
 
 	public void move(){
+		curDirection = pendingNewDirection;
 		int oldHeadColIndex = cells.get(0).colIndex;
 		int oldHeadRowIndex = cells.get(0).rowIndex;
 
-		switch(direction){
+		switch(curDirection){
 			case UP: headCell.rowIndex++; break;
 			case DOWN: headCell.rowIndex--; break;
 			case LEFT: headCell.colIndex--; break;

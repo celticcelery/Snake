@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
 
-public class MyGdxGame extends ApplicationAdapter {
+public class SnakeGame extends ApplicationAdapter implements GestureDetector.GestureListener{
 
 	final static int MS_CONSTANT = 100;
 	Timer timer;
@@ -36,20 +38,22 @@ public class MyGdxGame extends ApplicationAdapter {
 		Storage.snake  = new Snake();
 		Storage.pizza  = new Pizza();
 		timer = new Timer(MS_CONSTANT);
+		Gdx.input.setInputProcessor(new GestureDetector(new SnakeGame()));
 	}
 
 	@Override
 	public void render () {
 
 		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
-			Storage.snake.setDirection(Snake.Direction.LEFT);
+			Storage.snake.setCurDirection(Snake.Direction.LEFT);
 		}else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
-			Storage.snake.setDirection(Snake.Direction.RIGHT);
+			Storage.snake.setCurDirection(Snake.Direction.RIGHT);
 		}else if(Gdx.input.isKeyPressed(Input.Keys.UP)){
-			Storage.snake.setDirection(Snake.Direction.UP);
+			Storage.snake.setCurDirection(Snake.Direction.UP);
 		}else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
-			Storage.snake.setDirection(Snake.Direction.DOWN);
+			Storage.snake.setCurDirection(Snake.Direction.DOWN);
 		}
+
 
 
 
@@ -86,5 +90,65 @@ public class MyGdxGame extends ApplicationAdapter {
 		Storage.assetManager.dispose();
 	}
 
+	@Override
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		return false;
+	}
+
+	@Override
+	public boolean fling(float velocityX, float velocityY, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		if(Math.abs(deltaX) > Math.abs(deltaY)) {
+			if(deltaX > 0) {
+				Storage.snake.setCurDirection(Snake.Direction.RIGHT);
+			} else {
+				Storage.snake.setCurDirection(Snake.Direction.LEFT);
+			}
+
+		} else if(Math.abs(deltaX) < Math.abs(deltaY)) {
+			if(deltaY > 0){
+				Storage.snake.setCurDirection(Snake.Direction.DOWN);
+			} else {
+				Storage.snake.setCurDirection(Snake.Direction.UP);
+			}
+		} else {
+			return false;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
+		return false;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+		return false;
+	}
+
+	@Override
+	public void pinchStop() {
+
+	}
 }
 
