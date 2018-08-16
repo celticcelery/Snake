@@ -16,5 +16,6 @@ public class Storage {
 	static Random random;
 	static BitmapFont font;
 	static AssetManager assetManager;
+	static CloseBtn closeBtn;
 }
 

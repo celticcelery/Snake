@@ -52,6 +52,9 @@ public class Snake {
 	}
 
 	public void move(){
+		if(hasCrashed){
+			return;
+		}
 		curDirection = pendingNewDirection;
 		int oldHeadColIndex = cells.get(0).colIndex;
 		int oldHeadRowIndex = cells.get(0).rowIndex;
@@ -87,10 +90,15 @@ public class Snake {
 	}
 
 	private boolean hasValidHeadPos(){
-		if(headCell.colIndex < 0 || headCell.colIndex >= Field.MAX_COL_COUNT || headCell.rowIndex >= Field.MAX_ROW_COUNT || headCell.rowIndex < 0){
-			return false;
+		for(SnakeCell curCell : cells) {
+			if (headCell == curCell) {continue;}
+			if(headCell.rowIndex == curCell.rowIndex && headCell.colIndex == curCell.colIndex) {
+
+				return false;
+			}
 		}
-		return true;
+		return headCell.colIndex >= 0 && headCell.colIndex < Field.MAX_COL_COUNT && headCell.rowIndex < Field.MAX_ROW_COUNT && headCell.rowIndex >= 0;
+
 	}
 
 	public boolean contains(int colIndex, int rowIndex){

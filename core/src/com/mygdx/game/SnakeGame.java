@@ -30,6 +30,8 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 		Storage.assetManager.load("snake_head.bmp", Texture.class);
 		Storage.assetManager.load("snake_body.bmp", Texture.class);
 		Storage.assetManager.load("pizza.bmp", Texture.class);
+		Storage.assetManager.load("replay.png", Texture.class);
+		Storage.assetManager.load("close.png", Texture.class);
 		Storage.assetManager.finishLoading();
 		Storage.random = new Random();
 		Storage.font   = new BitmapFont();
@@ -61,7 +63,8 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 		if(timer.isOnTime()){
 			Storage.snake.move();
 			if(Storage.snake.getHasCrashed()){
-				System.out.println("Game Over");
+				Storage.closeBtn = new CloseBtn(0,0);
+
 			}
 		}
 
@@ -80,7 +83,11 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 		Storage.snake.draw();
 		Storage.pizza.draw();
 		Storage.font.draw(Storage.batch, "pizza count: " + Storage.snake.getEatenPizzasCount() + " cells moved: " + Storage.snake.getSnakeCellsMoved(), 0, Gdx.graphics.getHeight());
+		if(Storage.closeBtn != null){
+			Storage.closeBtn.draw();
+		}
 		Storage.batch.end();
+
 	}
 	
 	@Override
@@ -92,6 +99,10 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 
 	@Override
 	public boolean touchDown(float x, float y, int pointer, int button) {
+		y = Gdx.graphics.getHeight() - y;
+		if(Storage.closeBtn.isClicked(x, y)){
+			System.exit(0);
+		}
 		return false;
 	}
 
