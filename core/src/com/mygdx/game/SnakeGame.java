@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class SnakeGame extends ApplicationAdapter implements GestureDetector.GestureListener{
 
-	final static int MS_CONSTANT = 100;
+	final static int MS_CONSTANT = 90;
 	Timer timer;
 
 
@@ -64,6 +64,7 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 			Storage.snake.move();
 			if(Storage.snake.getHasCrashed()){
 				Storage.closeBtn = new CloseBtn(0,0);
+				Storage.replayBtn = new ReplayBtn(Gdx.graphics.getWidth() - Storage.assetManager.get("replay.png",Texture.class).getWidth(), 0);
 
 			}
 		}
@@ -83,8 +84,10 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 		Storage.snake.draw();
 		Storage.pizza.draw();
 		Storage.font.draw(Storage.batch, "pizza count: " + Storage.snake.getEatenPizzasCount() + " cells moved: " + Storage.snake.getSnakeCellsMoved(), 0, Gdx.graphics.getHeight());
-		if(Storage.closeBtn != null){
+		if(Storage.snake.getHasCrashed()){
 			Storage.closeBtn.draw();
+			Storage.replayBtn.draw();
+
 		}
 		Storage.batch.end();
 
@@ -102,6 +105,9 @@ public class SnakeGame extends ApplicationAdapter implements GestureDetector.Ges
 		y = Gdx.graphics.getHeight() - y;
 		if(Storage.closeBtn.isClicked(x, y)){
 			System.exit(0);
+		}
+		if (Storage.replayBtn.isClicked(x, y)) {
+			Storage.snake = new Snake();
 		}
 		return false;
 	}

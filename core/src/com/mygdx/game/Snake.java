@@ -8,8 +8,8 @@ import java.util.ArrayList;
 public class Snake {
 	ArrayList<SnakeCell> cells = new ArrayList<SnakeCell>();
 	enum Direction {UP, DOWN, LEFT, RIGHT};
-	private Direction curDirection = Direction.RIGHT;
-	private Direction pendingNewDirection = Direction.RIGHT;
+	private Direction curDirection = Direction.DOWN;
+	private Direction pendingNewDirection = Direction.DOWN;
 	private SnakeCell headCell;
 	private int eatenPizzasCount;
 	private int snakeCellsMoved, oldTailColIndex, oldTailRowIndex;
@@ -19,7 +19,6 @@ public class Snake {
 		headCell = new SnakeCell(Field.MAX_COL_COUNT / 2, Field.MAX_ROW_COUNT / 2, true);
 		cells.add(headCell);
 		cells.add(new SnakeCell(cells.get(0).colIndex - 1, Field.MAX_ROW_COUNT / 2, false));
-		cells.add(new SnakeCell(cells.get(0).colIndex - 2, Field.MAX_ROW_COUNT / 2, false));
 
 //		cells.add(new SnakeCell());
 	}

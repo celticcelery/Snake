@@ -17,5 +17,6 @@ public class Storage {
 	static BitmapFont font;
 	static AssetManager assetManager;
 	static CloseBtn closeBtn;
+	static ReplayBtn replayBtn;
 }
 
